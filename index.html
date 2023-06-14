@@ -47,11 +47,29 @@
             background-color: #0056b3;
         }
     </style>
+    <script>
+        function validateForm() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // 模拟登录验证
+            if (username === "admin" && password === "123456") {
+                // 登录成功，跳转到受保护的页面
+                window.location.href = "protected.html";
+            } else {
+                // 登录失败，显示错误信息
+                alert("Invalid username or password.");
+            }
+
+            // 阻止表单提交
+            return false;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Login</h1>
-        <form action="/login" method="post">
+        <form onsubmit="return validateForm()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             
