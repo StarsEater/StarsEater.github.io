@@ -39,12 +39,12 @@
                 transform: translateY(0);
             }
         }
-        input {
-            margin: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-family: 'Roboto', sans-serif;
+        input[type="radio"] {
+            margin: 0 5px;
+        }
+        label {
+            font-size: 1em;
+            color: #333;
         }
         button {
             margin: 10px;
@@ -55,106 +55,158 @@
             border-radius: 3px;
             cursor: pointer;
             font-family: 'Roboto', sans-serif;
-            transition: background-color 0.3s
-          , transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
         button:hover {
-        background-color: #45a049;
-        transform: scale(1.05);
+            background-color: #45a049;
+            transform: scale(1.05);
         }
         .hint {
-        color: #888;
-        font-size: 0.9em;
-        font-style: italic;
+            color: #888;
+            font-size: 0.9em;
+            font-style: italic;
         }
-        </style>
-        </head>
-        <body>
-        <h1>纯文字解谜游戏</h1>
-        <div id="riddle-container">
+    </style>
+</head>
+<body>
+    <h1>纯文字解谜游戏</h1>
+    <div id="riddle-container">
         <div id="riddle-1" class="riddle">
-        <p>谜题1：它是中国的首都，有着悠久的历史和文化。</p>
-        <input type="text" id="answer-1" placeholder="请输入答案">
-        <button onclick="checkAnswer(1)">提交答案</button>
-        <p class="hint">提示：它的名字由两个汉字组成。</p>
+            <p>谜题1：它是中国的首都，有着悠久的历史和文化。</p>
+            <input type="radio" id="answer-1-1" name="answer-1" value="北京市">
+            <label for="answer-1-1">北京市</label>
+            <input type="radio" id="answer-1-2" name="answer-1" value="上海市">
+            <label for="answer-1-2">上海市</label>
+            <button onclick="checkAnswer(1)">提交答案</button>
+            <p class="hint">提示：它的名字由两个汉字组成。</p>
         </div>
-        </div>
-        <script>
+    </div>
+    <script>
         const riddles = [
-        "北京市",
-        "朝阳区",
-        "天辰东路1号院",
-        "亚洲金融大厦",
-        "D座",
-        "五层",
-        "空中花园"
+            "北京市",
+            "朝阳区",
+            "天辰东路1号院",
+            "亚洲金融大厦",
+            "D座",
+            "五层",
+            "空中花园"
         ];
-            
-            
-    function checkAnswer(index) {
-        const answer = document.getElementById(`answer-${index}`).value;
-        if (answer === riddles[index - 1]) {
-            if (index === riddles.length) {
-                alert("恭喜你，已经完成所有谜题！");
-            } else {
-                document.getElementById(`riddle-${index}`).style.animation = "fadeOutDown 1s forwards";
-                setTimeout(() => {
-                    document.getElementById(`riddle-${index}`).style.display = "none";
-                    const nextRiddle = document.createElement("div");
-                    nextRiddle.id = `riddle-${index + 1}`;
-                    nextRiddle.className = "riddle";
-                    nextRiddle.innerHTML = `
-                        <p>谜题${index + 1}：${getRiddleText(index)}</p>
-                        <input type="text" id="answer-${index + 1}" placeholder="请输入答案">
-                        <button onclick="checkAnswer(${index + 1})">提交答案</button>
-                        <p class="hint">${getHintText(index)}</p>
-                    `;
-                    document.getElementById("riddle-container").appendChild(nextRiddle);
-                }, 1000);
-            }
-        } else {
-            alert("答案错误，请重试！");
-        }
-    }
 
-    function getRiddleText(index) {
+        function checkAnswer(index) {
+            const answerInputs = document.getElementsByName(`answer-${index}`);
+            let answer = "";
+            for (const input of answerInputs) {
+                if (input.checked) {
+                    answer = input.value;
+                    break;
+                }
+            }
+            if (answer === riddles[index - 1]) {
+                if (index === riddles.length) {
+                    alert("恭喜你，已经完成所有谜题！");
+                } else {
+                    document.getElementById(`riddle-${index}`).style.animation = "fadeOutDown 1s forwards";
+                    setTimeout(() => {
+                        document.getElementById(`riddle-${index}`).style.display = "none";
+                        const nextRiddle = document.createElement("div");
+                        nextRiddle.id = `riddle-${index + 1}`;
+                        nextRiddle.className = "riddle";
+                        nextRiddle.innerHTML = `
+                            <p>谜题${index + 1}：${getRiddleText(index)}</p>
+                            ${getAnswerOptions(index + 1)}
+                            <button onclick="checkAnswer(${index + 1})">提交答案</button>
+                            <p class="hint">${getHintText(index)}</p>
+                        `;
+                        document.getElementById("riddle-container").appendChild(nextRiddle);
+                    }, 1000);
+                }
+            } else {
+                alert("答案错误，请重试！");
+            }
+        }
+
+        function getRiddleText(index) {
+            switch (index) {
+                case 1:
+                    return "它是北京市的一个行政区，有着许多现代化的建筑。";
+                case 2:
+                    return "这是一个位于朝阳区的住宅小区，地址中包含了一个方向和一个天体。";
+                case 3:
+                    return "这座大厦位于上述住宅小区附近，名字中包含了一个洲和一个经济术语。";
+                case 4:
+                    return "在这座大厦中，有一个字母代表的建筑部分。";
+                case 5:
+                return "在这个建筑部分中，有一个楼层的名字是一个数字。";
+                case 6:
+                return "在这个楼层上，有一个特殊的区域，它位于空中并且有很多植物。";
+                default:
+                return "";
+                }
+              }
+ function getAnswerOptions(index) {
+        switch (index) {
+            case 2:
+                return `
+                    <input type="radio" id="answer-2-1" name="answer-2" value="朝阳区">
+                    <label for="answer-2-1">朝阳区</label>
+                    <input type="radio" id="answer-2-2" name="answer-2" value="海淀区">
+                    <label for="answer-2-2">海淀区</label>
+                `;
+            case 3:
+                return `
+                    <input type="radio" id="answer-3-1" name="answer-3" value="天辰东路1号院">
+                    <label for="answer-3-1">天辰东路1号院</label>
+                    <input type="radio" id="answer-3-2" name="answer-3" value="天辰西路1号院">
+                    <label for="answer-3-2">天辰西路1号院</label>
+                `;
+            case 4:
+                return `
+                    <input type="radio" id="answer-4-1" name="answer-4" value="亚洲金融大厦">
+                    <label for="answer-4-1">亚洲金融大厦</label>
+                    <input type="radio" id="answer-4-2" name="answer-4" value="欧洲金融大厦">
+                    <label for="answer-4-2">欧洲金融大厦</label>
+                `;
+            case 5:
+                return `
+                    <input type="radio" id="answer-5-1" name="answer-5" value="A座">
+                    <label for="answer-5-1">A座</label>
+                    <input type="radio" id="answer-5-2" name="answer-5" value="D座">
+                    <label for="answer-5-2">D座</label>
+                    ;                 case 6:                     return 
+                    <input type="radio" id="answer-6-1" name="answer-6" value="三层">
+                    <label for="answer-6-1">三层</label>
+                    <input type="radio" id="answer-6-2" name="answer-6" value="五层">
+                    <label for="answer-6-2">五层</label>
+                    ;                 case 7:                     return 
+                    <input type="radio" id="answer-7-1" name="answer-7" value="空中花园">
+                    <label for="answer-7-1">空中花园</label>
+                    <input type="radio" id="answer-7-2" name="answer-7" value="地下花园">
+                    <label for="answer-7-2">地下花园</label>
+                    `;
+                    default:
+                    return "";
+                    }
+                  }
+        
+        function getHintText(index) {
         switch (index) {
             case 1:
-                return "它是北京市的一个行政区，有着许多现代化的建筑。";
+                return "提示：它的名字由两个汉字组成。";
             case 2:
-                return "这是一个位于朝阳区的住宅小区，地址中包含了一个方向和一个天体。";
+                return "提示：它的名字由两个汉字组成。";
             case 3:
-                return "这座大厦位于上述住宅小区附近，名字中包含了一个洲和一个经济术语。";
+                return "提示：它的名字由五个汉字组成。";
             case 4:
-                return "在这座大厦中，有一个字母代表的建筑部分。";
+                return "提示：它的名字由一个大写字母表示。";
             case 5:
-                return "在这个建筑部分中，有一个楼层的名字是一个数字。";
+                return "提示：这个数字是一个奇数。";
             case 6:
-                return "在这个楼层上，有一个特殊的区域，它位于空中并且有很多植物。";
+                return "提示：这个区域的名字由四个汉字组成。";
             default:
                 return "";
         }
     }
-
-    function getHintText(index) {
-        switch (index) {
-            case 1:
-                return "提示：它的名字由两个汉字组成，第二个字是“阳”。";
-            case 2:
-                return "提示：它的名字由五个汉字组成，包括一个方向和一个天体。";
-            case 3:
-                return "提示：它的名字由五个汉字组成，包括一个洲和一个经济术语。";
-            case 4:
-                return "提示：它的名字由一个字母组成。";
-            case 5:
-                return "提示：它的名字由一个汉字组成，是一个数字。";
-            case 6:
-                return "提示：它的名字由三个汉字组成，描述了一个特殊的区域。
-   ";
-default:
-return "";
-}
-}
 </script>
 </body>
 </html>
+
