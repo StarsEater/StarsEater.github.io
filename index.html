@@ -1,19 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解谜游戏</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
+    <title>纯文字解谜游戏</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            transition: background-color 1s;
+        }
+        h1 {
+            color: #333;
+            font-weight: 300;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        .riddle {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards;
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        input {
+            margin: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-family: 'Roboto', sans-serif;
+        }
+        button {
+            margin: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s
+          , transform 0.3s;
+        }
+        button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+        }
+        .hint {
+        color: #888;
+        font-size: 0.9em;
+        font-style: italic;
+        }
+        </style>
+        </head>
+        <body>
         <h1>纯文字解谜游戏</h1>
-        <p id="puzzle-text">请根据提示输入诗句中的关键字：</p>
-        <input type="text" id="input-text" placeholder="输入关键字">
-        <button id="submit-btn">提交</button>
-        <p id="hint-text"></p>
-    </div>
-    <script src="script.js"></script>
+        <div id="riddle-container">
+        <div id="riddle-1" class="riddle">
+        <p>谜题1：它是中国的首都，有着悠久的历史和文化。</p>
+        <input type="text" id="answer-1" placeholder="请输入答案">
+        <button onclick="checkAnswer(1)">提交答案</button>
+        <p class="hint">提示：它的名字由两个汉字组成。</p>
+        </div>
+        </div>
+        <script>
+        const riddles = [
+        "北京市",
+        "朝阳区",
+        "天辰东路1号院",
+        "亚洲金融大厦",
+        "D座",
+        "五层",
+        "空中花园"
+        ];
+            
+            
+    function checkAnswer(index) {
+        const answer = document.getElementById(`answer-${index}`).value;
+        if (answer === riddles[index - 1]) {
+            if (index === riddles.length) {
+                alert("恭喜你，已经完成所有谜题！");
+            } else {
+                document.getElementById(`riddle-${index}`).style.animation = "fadeOutDown 1s forwards";
+                setTimeout(() => {
+                    document.getElementById(`riddle-${index}`).style.display = "none";
+                    const nextRiddle = document.createElement("div");
+                    nextRiddle.id = `riddle-${index + 1}`;
+                    nextRiddle.className = "riddle";
+                    nextRiddle.innerHTML = `
+                        <p>谜题${index + 1}：${getRiddleText(index)}</p>
+                        <input type="text" id="answer-${index + 1}" placeholder="请输入答案">
+                        <button onclick="checkAnswer(${index + 1})">提交答案</button>
+                        <p class="hint">${getHintText(index)}</p>
+                    `;
+                    document.getElementById("riddle-container").appendChild(nextRiddle);
+                }, 1000);
+            }
+        } else {
+            alert("答案错误，请重试！");
+        }
+    }
+
+    function getRiddleText(index) {
+        switch (index) {
+            case 1:
+                return "它是北京市的一个行政区，有着许多现代化的建筑。";
+            case 2:
+                return "这是一个位于朝阳区的住宅小区，地址中包含了一个方向和一个天体。";
+            case 3:
+                return "这座大厦位于上述住宅小区附近，名字中包含了一个洲和一个经济术语。";
+            case 4:
+                return "在这座大厦中，有一个字母代表的建筑部分。";
+            case 5:
+                return "在这个建筑部分中，有一个楼层的名字是一个数字。";
+            case 6:
+                return "在这个楼层上，有一个特殊的区域，它位于空中并且有很多植物。";
+            default:
+                return "";
+        }
+    }
+
+    function getHintText(index) {
+        switch (index) {
+            case 1:
+                return "提示：它的名字由两个汉字组成，第二个字是“阳”。";
+            case 2:
+                return "提示：它的名字由五个汉字组成，包括一个方向和一个天体。";
+            case 3:
+                return "提示：它的名字由五个汉字组成，包括一个洲和一个经济术语。";
+            case 4:
+                return "提示：它的名字由一个字母组成。";
+            case 5:
+                return "提示：它的名字由一个汉字组成，是一个数字。";
+            case 6:
+                return "提示：它的名字由三个汉字组成，描述了一个特殊的区域。
+   ";
+default:
+return "";
+}
+}
+</script>
 </body>
 </html>
