@@ -3,81 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    </style>
-    <script>
-        function validateForm() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            // 模拟登录验证
-            if (username === "admin" && password === "123456") {
-                // 登录成功，跳转到受保护的页面
-                window.location.href = "protected.html";
-            } else {
-                // 登录失败，显示错误信息
-                alert("Invalid username or password.");
-            }
-
-            // 阻止表单提交
-            return false;
-        }
-    </script>
+    <title>解谜游戏</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Login</h1>
-        <form onsubmit="return validateForm()">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <input type="submit" value="Login">
-        </form>
+        <h1>纯文字解谜游戏</h1>
+        <p id="puzzle-text">请根据提示输入诗句中的关键字：</p>
+        <input type="text" id="input-text" placeholder="输入关键字">
+        <button id="submit-btn">提交</button>
+        <p id="hint-text"></p>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
