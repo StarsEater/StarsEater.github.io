@@ -6,7 +6,7 @@
     <script>
         function validateInput() {
             var userInput = document.getElementById("userInput").value;
-            if (userInput === "你好，戚良缘！我就是要直呼你的名字。我爱你！") {
+            if (userInput === "你好，戚良缘！我就是要直呼你的名字。我爱你！我喜欢看着你笑，喜欢你认真讲话的样子，喜欢和你呆在一起！") {
                 document.getElementById("welcomeMessage").style.display = "block";
                 document.getElementById("inputForm").style.display = "none";
             } else {
@@ -19,7 +19,7 @@
 <body>
     <div id="inputForm">
         <label for="userInput">请输入文本：</label>
-        <input type="text" id="userInput" placeholder="输入'你好，我是人'以验证">
+        <input type="text" id="userInput" placeholder="写一些你快忘了的话">
         <button onclick="validateInput()">提交</button>
     </div>
     <div id="welcomeMessage" style="display:none;">
