@@ -2,215 +2,28 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文艺版问答</title>
-    <style>
-        @keyframes blink {
-            0% {
-                opacity: 0;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
+    <title>塞瓦提斯的马</title>
+    <script>
+        function validateInput() {
+            var userInput = document.getElementById("userInput").value;
+            if (userInput === "你好，戚良缘！我就是要直呼你的名字。我爱你！") {
+                document.getElementById("welcomeMessage").style.display = "block";
+                document.getElementById("inputForm").style.display = "none";
+            } else {
+                alert("输入错误，您将被退出。");
+                window.close(); // 注意：在某些浏览器环境中，这可能不会工作，除非是脚本打开的窗口。
             }
         }
-
-        body {
-            font-family: '楷体', serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-
-        .riddle-container {
-            border: 2px solid #8b4513;
-            background-color: #fdf5e6;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .riddle {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        input[type="radio"] {
-            cursor: pointer;
-        }
-
-        button {
-            background-color: #8b4513;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-left: 10px;
-        }
-
-        button:hover {
-            background-color: #a0522d;
-        }
-
-        .hint {
-            font-size: 14px;
-            color: #8b4513;
-            margin-top: 5px;
-        }
-
-        .letter-border {
-            border: 2px solid #8b4513;
-            padding: 20px;
-            background-color: #fdf5e6;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        #typewriter {
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            white-space: pre;
-            overflow: hidden;
-            display: none;
-        }
-
-        #cursor {
-            animation: blink 1s infinite;
-        }
-
-        #jumping-person {
-            display: none;
-            font-size: 24px;
-            animation: jump 1s infinite;
-        }
-
-        @keyframes jump {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="letter-border">
-        <div id="riddles"></div>
+    <div id="inputForm">
+        <label for="userInput">请输入文本：</label>
+        <input type="text" id="userInput" placeholder="输入'你好，我是人'以验证">
+        <button onclick="validateInput()">提交</button>
     </div>
-    <div id="typewriter">
-        <span id="text"></span><span id="cursor">|</span>
+    <div id="welcomeMessage" style="display:none;">
+        <h1>恭喜你得到未来的一张门票！想要兑换的话找秦晔，他一定会兑现诺言的！</h1>
     </div>
-    <div id="jumping-person">🏃</div>
-
-    <script>
-        let riddles = [
-            {
-                question: "这个城市位于中国的哪个省份？",
-                options: ["上海市", "北京市", "广东省"],
-                answer: "北京市"
-            },
-            {
-                question: "这个城市的哪个区是科技产业的中心？",
-                options: ["朝阳区", "海淀区", "东城区"],
-                answer: "海淀区"
-            },
-            {
-                question: "这个区有一个著名的科技园区，它的名字是什么？",
-                options: ["中关村科技园区", "北京经济技术开发区", "北京科技园"],
-                answer: "中关村科技园区"
-            },
-            {
-                question: "在这个科技园区中，有一个大楼的名字是由一个字母代表的建筑部分。",
-                options: ["A座", "B座", "C座"],
-                answer: "A座"
-            },
-            {
-                question: "在这个建筑部分中，有一个楼层的名字是一个数字。",
-                options: ["一层", "二层", "三层"],
-                answer: "三层"
-            },
-            {
-                question: "在这个楼层上，有一个特殊的区域，它位于空中并且有很多植物。",
-                options: ["空中花园", "空中走廊", "空中休息室"],
-                answer: "空中花园"
-            }
-        ];
-        let currentRiddleIndex = 0;
-        function showRiddle(index) {
-        let riddleElement = document.createElement("div");
-        riddleElement.className = "riddle-container";
-        riddleElement.innerHTML = `
-            <p class="riddle">${riddles[index].question}</p>
-            <div class="options">
-                ${riddles[index].options.map((option, i) => `
-                    <label class="option">
-                        <input type="radio" name="option" value="${option}">
-                        ${option}
-                    </label>
-                `).join('')}
-            </div>
-            <button onclick="submitAnswer(${index})">提交答案</button>
-        `;
-        document.getElementById("riddles").appendChild(riddleElement);
-    }
-
-    function submitAnswer(index) {
-        let selectedOption = document.querySelector(`input[name="option"]:checked`);
-        if (selectedOption && selectedOption.value === riddles[index].answer) {
-            if (index === riddles.length - 1) {
-                document.getElementById("riddles").innerHTML = "<p>恭喜你，你已经回答了所有问题！</p>";
-                document.getElementById("typewriter").style.display = "block";
-                document.getElementById("jumping-person").style.display = "inline";
-                typeText("恭喜你完成了所有的问题\n");
-                typeText("恭喜你完成了所有的问题\n");
-                typeText("恭喜你完成了所有的问题\n");
-                typeText("恭喜你完成了所有的问题\n");
-                typeText("恭喜你完成了所有的问题\n");
-                typeText("恭喜你完成了所有的问题\n");
-                } else {
-                document.getElementById("riddles").innerHTML = "";
-                currentRiddleIndex++;
-                showRiddle(currentRiddleIndex);
-                }
-                } else {
-                let hintElement = document.createElement("p");
-                hintElement.className = "hint";
-                hintElement.textContent = "答案不正确，请再试一次。";
-                document.querySelector(".riddle-container").appendChild(hintElement);
-                }
-    }
-        function typeText(text) {
-     let typewriter = document.getElementById("text");
-     let i = 0;
-     let interval = setInterval(() => {
-         if (i < text.length) {
-             typewriter.textContent += text[i];
-             i++;
-         } else {
-             clearInterval(interval);
-         }
-     }, 100);
- }
-
- showRiddle(currentRiddleIndex);
- </script>
 </body>
 </html>
